@@ -1,7 +1,8 @@
-package com.harbour.clearview.api.datasource;
+package com.harbour.clearview.api.datasource.dao;
 
 import com.google.cloud.firestore.Firestore;
 import com.harbour.clearview.api.application.dto.TodoDTO;
+import com.harbour.clearview.api.datasource.FirebaseInitializer;
 import jakarta.enterprise.inject.Default;
 
 import java.io.IOException;
