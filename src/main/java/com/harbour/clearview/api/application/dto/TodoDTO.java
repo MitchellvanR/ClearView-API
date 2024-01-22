@@ -5,6 +5,8 @@ public class TodoDTO {
     private String description;
     private boolean isCompleted;
 
+    public TodoDTO() {}
+
     public TodoDTO(String title, String description) {
         this.title = title;
         this.description = description;
