@@ -38,6 +38,27 @@ public class FirebaseDaoStrategy implements TodoDao {
     }
 
     @Override
+    public void addTodoToList(String todoListTitle, TodoDTO newTodo) {
+        try {
+            DocumentReference documentReference = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).document(todoListTitle);
+            DocumentSnapshot documentSnapshot = documentReference.get().get();
+            validateTodoListExists(documentSnapshot);
+            List<Map<String, Object>> todos = extractTodosFromSnapshot(documentSnapshot);
+
+            Map<String, Object> newTodoMap = new HashMap<>();
+            newTodoMap.put(FirebaseConstants.TODO_TITLE_KEY, newTodo.getTitle());
+            newTodoMap.put(FirebaseConstants.TODO_DESCRIPTION_KEY, newTodo.getDescription());
+            newTodoMap.put(FirebaseConstants.TODO_COMPLETED_KEY, newTodo.isCompleted());
+
+            todos.add(newTodoMap);
+
+            documentReference.update(FirebaseConstants.TODO_LIST_TODOS_KEY, todos);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new TodoListNotFoundException();
+        }
+    }
+
+    @Override
     public TodoListDTO getTodoList(String title) {
         try {
             Query query = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).whereEqualTo(FirebaseConstants.TODO_LIST_TITLE_KEY, title);
