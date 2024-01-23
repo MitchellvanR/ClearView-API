@@ -28,10 +28,10 @@ public class TodoResource {
     @GET
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTodo(@PathParam("title") String title) {
+    public Response getTodoList(@PathParam("title") String title) {
         return Response
                 .ok()
-                .entity(todoService.getTodo(title))
+                .entity(todoService.getTodoList(title))
                 .build();
     }
 

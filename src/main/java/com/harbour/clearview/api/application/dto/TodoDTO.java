@@ -33,6 +33,10 @@ public class TodoDTO {
         return completed;
     }
 
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
     public void complete() {
         completed = true;
     }

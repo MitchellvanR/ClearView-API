@@ -4,15 +4,12 @@ import com.google.cloud.firestore.*;
 import com.harbour.clearview.api.application.dto.TodoDTO;
 import com.harbour.clearview.api.application.dto.TodoListDTO;
 import com.harbour.clearview.api.datasource.FirebaseInitializer;
-import com.harbour.clearview.api.datasource.dao.exceptions.CollectionNotFoundException;
-import com.harbour.clearview.api.datasource.dao.exceptions.TodoNotFoundException;
+import com.harbour.clearview.api.datasource.dao.exceptions.TodoListNotFoundException;
 import com.harbour.clearview.api.datasource.util.FirebaseConstants;
 import jakarta.enterprise.inject.Default;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Default
@@ -39,17 +36,13 @@ public class FirebaseDaoStrategy implements TodoDao {
     }
 
     @Override
-    public TodoDTO getTodo(String title) {
+    public TodoListDTO getTodoList(String title) {
         try {
-            Query query = database.collection("todos").whereEqualTo("title", title);
+            Query query = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).whereEqualTo(FirebaseConstants.TODO_LIST_TITLE_KEY, title);
             QuerySnapshot querySnapshot = query.get().get();
-            if (!querySnapshot.isEmpty()) {
-                return getTodoDTO(querySnapshot);
-            } else {
-                throw new TodoNotFoundException();
-            }
+            return getTodoListDTO(querySnapshot);
         } catch (ExecutionException | InterruptedException e) {
-            throw new CollectionNotFoundException();
+            throw new TodoListNotFoundException();
         }
     }
 
@@ -63,19 +56,34 @@ public class FirebaseDaoStrategy implements TodoDao {
         database.collection("todos").document(title).delete();
     }
 
-    private TodoDTO getTodoDTO(QuerySnapshot querySnapshot) {
+    private TodoListDTO getTodoListDTO(QuerySnapshot querySnapshot) {
         QueryDocumentSnapshot document = querySnapshot.getDocuments().getFirst();
+        TodoListDTO todoListDTO = new TodoListDTO();
+        todoListDTO.setTitle(Objects.requireNonNull(document.getString(FirebaseConstants.TODO_LIST_TITLE_KEY)));
+        todoListDTO.setDate(Objects.requireNonNull(document.getString(FirebaseConstants.TODO_LIST_DATE_KEY)));
+        todoListDTO.setTodos(extractTodos(document));
+        return todoListDTO;
+    }
 
-        TodoDTO todo = new TodoDTO();
-        todo.setTitle(Objects.requireNonNull(document.getString("title")));
-        todo.setDescription(Objects.requireNonNull(document.getString("description")));
-
-        Boolean isCompleted = document.getBoolean("isCompleted");
-        if (isCompleted != null && isCompleted) {
-            todo.complete();
-        } else {
-            todo.incomplete();
+    private List<TodoDTO> extractTodos(QueryDocumentSnapshot document) {
+        List<?> todosList = (List<?>) document.get(FirebaseConstants.TODO_LIST_TODOS_KEY);
+        List<TodoDTO> todoDTOList = new ArrayList<>();
+        if (todosList == null) return todoDTOList;
+        for (Object todoObj : todosList) {
+            if (todoObj instanceof Map<?, ?>) {
+                @SuppressWarnings("unchecked") // The warning can be suppressed, because in the condition type safety is ensured by use of generics.
+                Map<String, Object> todoMap = (Map<String, Object>) todoObj;
+                todoDTOList.add(getTodoDTO(todoMap));
+            }
         }
-        return todo;
+        return todoDTOList;
+    }
+
+    private TodoDTO getTodoDTO(Map<String, Object> todoMap) {
+        TodoDTO todoDTO = new TodoDTO();
+        todoDTO.setTitle(Objects.requireNonNull((String) todoMap.get(FirebaseConstants.TODO_TITLE_KEY)));
+        todoDTO.setDescription(Objects.requireNonNull((String) todoMap.get(FirebaseConstants.TODO_DESCRIPTION_KEY)));
+        todoDTO.setCompleted((boolean) todoMap.get(FirebaseConstants.TODO_COMPLETED_KEY));
+        return todoDTO;
     }
 }
