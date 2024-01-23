@@ -36,4 +36,6 @@ public class TodoDTO {
     public void complete() {
         isCompleted = true;
     }
+
+    public void incomplete() { isCompleted = false; }
 }

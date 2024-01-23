@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class FirebaseInitializer {
+    private static boolean initialized = false;
+
     public static Firestore initialize() throws IOException {
+        if (initialized) return FirestoreClient.getFirestore();
         try (InputStream serviceAccount = FirebaseInitializer.class.getClassLoader().getResourceAsStream("serviceAccountKey.json")) {
             if (serviceAccount == null) throw new RuntimeException();
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
@@ -18,6 +21,7 @@ public class FirebaseInitializer {
                     .setCredentials(credentials)
                     .build();
             FirebaseApp.initializeApp(options);
+            initialized = true;
             return FirestoreClient.getFirestore();
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());

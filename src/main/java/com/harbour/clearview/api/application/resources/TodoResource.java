@@ -9,7 +9,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.net.URI;
 
-@Path("/")
+@Path("/todos")
 public class TodoResource {
     private TodoService todoService;
 
@@ -21,6 +21,16 @@ public class TodoResource {
         return Response
                 .created(URI.create("/" + todoDTO.getTitle()))
                 .entity(todoDTO)
+                .build();
+    }
+
+    @GET
+    @Path("/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTodo(@PathParam("title") String title) {
+        return Response
+                .ok()
+                .entity(todoService.getTodo(title))
                 .build();
     }
 

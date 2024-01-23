@@ -11,8 +11,14 @@ public class TodoService {
         todoDao.addTodo(todoDTO);
     }
 
+    public TodoDTO getTodo(String title) {
+        return todoDao.getTodo(title);
+    }
+
     @Inject
     public void setTodoDao(TodoDao todoDao) {
         this.todoDao = todoDao;
     }
+
+
 }
