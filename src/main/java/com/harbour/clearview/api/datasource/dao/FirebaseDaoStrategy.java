@@ -72,18 +72,20 @@ public class FirebaseDaoStrategy implements TodoDao {
         for (Object todoObj : todosList) {
             if (todoObj instanceof Map<?, ?>) {
                 @SuppressWarnings("unchecked") // The warning can be suppressed, because in the condition type safety is ensured by use of generics.
-                Map<String, Object> todoMap = (Map<String, Object>) todoObj;
+                Map<String, ?> todoMap = (Map<String, ?>) todoObj;
                 todoDTOList.add(getTodoDTO(todoMap));
             }
         }
         return todoDTOList;
     }
 
-    private TodoDTO getTodoDTO(Map<String, Object> todoMap) {
+    private TodoDTO getTodoDTO(Map<String, ?> todoMap) {
         TodoDTO todoDTO = new TodoDTO();
         todoDTO.setTitle(Objects.requireNonNull((String) todoMap.get(FirebaseConstants.TODO_TITLE_KEY)));
         todoDTO.setDescription(Objects.requireNonNull((String) todoMap.get(FirebaseConstants.TODO_DESCRIPTION_KEY)));
-        todoDTO.setCompleted((boolean) todoMap.get(FirebaseConstants.TODO_COMPLETED_KEY));
+        Boolean todoCompleted = (Boolean) todoMap.get(FirebaseConstants.TODO_COMPLETED_KEY);
+        System.out.println(todoCompleted);
+        todoDTO.setCompleted(todoCompleted);
         return todoDTO;
     }
 }

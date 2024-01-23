@@ -7,5 +7,5 @@ public class FirebaseConstants {
     public static final String TODO_LIST_TODOS_KEY = "todos";
     public static final String TODO_TITLE_KEY = "title";
     public static final String TODO_DESCRIPTION_KEY = "description";
-    public static final String TODO_COMPLETED_KEY = "isCompleted";
+    public static final String TODO_COMPLETED_KEY = "completed";
 }
