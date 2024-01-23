@@ -1,6 +1,5 @@
 package com.harbour.clearview.api.datasource.dao;
 
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.harbour.clearview.api.application.dto.TodoDTO;
 import com.harbour.clearview.api.datasource.FirebaseInitializer;
@@ -59,11 +58,6 @@ public class FirebaseDaoStrategy implements TodoDao {
 
     @Override
     public void deleteTodo(String title) {
-//        Map<String, Object> updates = new HashMap<>();
-//        updates.put("title", FieldValue.delete());
-//        updates.put("description", FieldValue.delete());
-//        updates.put("isCompleted", FieldValue.delete());
-//        database.collection("todos").document(title).update(updates);
         database.collection("todos").document(title).delete();
     }
 
