@@ -9,5 +9,5 @@ public interface TodoDao {
 
     TodoListDTO getTodoList(String title);
 
-    void deleteTodo(String title);
+    void deleteTodoList(String title);
 }

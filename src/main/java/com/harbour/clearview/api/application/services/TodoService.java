@@ -17,8 +17,8 @@ public class TodoService {
         return todoDao.getTodoList(title);
     }
 
-    public void deleteTodo(String title) {
-        this.todoDao.deleteTodo(title);
+    public void deleteTodoList(String title) {
+        this.todoDao.deleteTodoList(title);
     }
 
     @Inject

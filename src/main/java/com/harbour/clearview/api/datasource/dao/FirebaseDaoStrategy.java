@@ -47,8 +47,8 @@ public class FirebaseDaoStrategy implements TodoDao {
     }
 
     @Override
-    public void deleteTodo(String title) {
-        database.collection("todos").document(title).delete();
+    public void deleteTodoList(String title) {
+        database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).document(title).delete();
     }
 
     private TodoListDTO getTodoListDTO(QuerySnapshot querySnapshot) {

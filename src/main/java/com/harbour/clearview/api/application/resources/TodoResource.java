@@ -38,8 +38,8 @@ public class TodoResource {
     @DELETE
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteTodo(@PathParam("title") String title) {
-        todoService.deleteTodo(title);
+    public Response deleteTodoList(@PathParam("title") String title) {
+        todoService.deleteTodoList(title);
         return Response.ok().build();
     }
 
