@@ -30,11 +30,11 @@ public class FirebaseDaoStrategy implements TodoDao {
     @Override
     public void addTodoList(TodoListDTO todoListDTO) {
         DocumentReference documentReference = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).document(todoListDTO.getTitle());
-        Map<String, Object> data = new HashMap<>();
-        data.put(FirebaseConstants.TODO_LIST_TITLE_KEY, todoListDTO.getTitle());
-        data.put(FirebaseConstants.TODO_LIST_DATE_KEY, todoListDTO.getDate());
-        data.put(FirebaseConstants.TODO_LIST_TODOS_KEY, todoListDTO.getTodos());
-        documentReference.set(data);
+        Map<String, Object> addedTodoList = new HashMap<>();
+        addedTodoList.put(FirebaseConstants.TODO_LIST_TITLE_KEY, todoListDTO.getTitle());
+        addedTodoList.put(FirebaseConstants.TODO_LIST_DATE_KEY, todoListDTO.getDate());
+        addedTodoList.put(FirebaseConstants.TODO_LIST_TODOS_KEY, todoListDTO.getTodos());
+        documentReference.set(addedTodoList);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class FirebaseDaoStrategy implements TodoDao {
     }
 
     @Override
-    public void updateTodoValue(String todoListTitle, String todoTitle, Map<String, Object> data) {
+    public void updateTodoValue(String todoListTitle, String todoTitle, Map<String, Object> updatedTodoValue) {
         try {
             DocumentReference documentReference = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).document(todoListTitle);
             DocumentSnapshot documentSnapshot = documentReference.get().get();
@@ -79,7 +79,7 @@ public class FirebaseDaoStrategy implements TodoDao {
             List<Map<String, Object>> todos = extractTodosFromSnapshot(documentSnapshot);
             for (Map<String, Object> todo : todos) {
                 if (todo.get(FirebaseConstants.TODO_TITLE_KEY).equals(todoTitle)) {
-                    todo.putAll(data);
+                    todo.putAll(updatedTodoValue);
                     break;
                 }
             }
