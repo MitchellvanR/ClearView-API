@@ -1,9 +1,11 @@
 package com.harbour.clearview.api.datasource.dao;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.harbour.clearview.api.application.dto.TodoDTO;
 import com.harbour.clearview.api.application.dto.TodoListDTO;
 import com.harbour.clearview.api.datasource.FirebaseInitializer;
+import com.harbour.clearview.api.datasource.dao.exceptions.NoTodoListsFoundException;
 import com.harbour.clearview.api.datasource.dao.exceptions.TodoListNotFoundException;
 import com.harbour.clearview.api.datasource.dao.exceptions.TodosNotFoundException;
 import com.harbour.clearview.api.datasource.util.FirebaseConstants;
@@ -68,6 +70,22 @@ public class FirebaseDaoStrategy implements TodoDao {
         } catch (ExecutionException | InterruptedException e) {
             throw new TodoListNotFoundException();
         }
+    }
+
+    @Override
+    public List<TodoListDTO> getAllTodoLists() {
+        List<TodoListDTO> todoLists = new ArrayList<>();
+        try {
+            QuerySnapshot querySnapshot = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).get().get();
+            for (QueryDocumentSnapshot document : querySnapshot.getDocuments()) {
+                TodoListDTO todoList = document.toObject(TodoListDTO.class);
+                todoLists.add(todoList);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new NoTodoListsFoundException();
+        }
+
+        return todoLists;
     }
 
     @Override

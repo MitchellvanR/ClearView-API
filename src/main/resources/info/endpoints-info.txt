@@ -1,10 +1,11 @@
 Endpoints:
 
-- POST  - addTodoList
-- POST  - addTodoToList
-- GET   - getTodoList
-- PATCH - updateTodoValue
-- PATCH - completeTodo
+- POST   - addTodoList
+- POST   - addTodoToList
+- GET    - getTodoList
+- GET    - getAllTodoLists
+- PATCH  - updateTodoValue
+- PATCH  - completeTodo
 - DELETE - deleteTodoList
 - DELETE - deleteTodoFromTodoList
 
@@ -34,11 +35,19 @@ This endpoint fetches an existing todo list from the cloud, based on the title o
 
 
 
+GET - getAllTodoLists
+https://domain.com/clearview/todoLists/
+Request body: None
+--------------------------------
+This endpoint fetches all existing todo lists from the cloud.
+
+
+
 PATCH - updateTodoValue
 https://domain.com/clearview/todoLists/{todoListTitle}/todos/{todoTitle}
 Request body: JSON with to be updated data { "field": "new value", ... }
 --------------------------------
-This endpoint updates a field of an existing todo in a todo list. It takes the title of the list, title of the todo and the data that needs to be updated
+This endpoint updates a field of an existing todo in a todo list. It takes the title of the list, title of the todo and the data that needs to be updated.
 
 
 
@@ -46,7 +55,7 @@ PATCH - completeTodo
 https://domain.com/clearview/todoLists/{todoListTitle}/todos/{todoTitle}
 Request body: None
 --------------------------------
-This endpoint completes an existing todo and makes use of the updateTodoValue method of its service. It takes the title of the todo list and the title of the todo that needs to be completed
+This endpoint completes an existing todo and makes use of the updateTodoValue method of its service. It takes the title of the todo list and the title of the todo that needs to be completed.
 
 
 

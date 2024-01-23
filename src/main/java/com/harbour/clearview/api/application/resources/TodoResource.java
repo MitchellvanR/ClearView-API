@@ -40,6 +40,15 @@ public class TodoResource {
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllTodoLists() {
+        return Response
+                .ok()
+                .entity(todoService.getAllTodoLists())
+                .build();
+    }
+
+    @GET
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTodoList(@PathParam("title") String title) {

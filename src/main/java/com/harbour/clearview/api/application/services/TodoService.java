@@ -5,6 +5,7 @@ import com.harbour.clearview.api.application.dto.TodoListDTO;
 import com.harbour.clearview.api.datasource.dao.TodoDao;
 import jakarta.inject.Inject;
 
+import java.util.List;
 import java.util.Map;
 
 public class TodoService {
@@ -21,6 +22,8 @@ public class TodoService {
     public TodoListDTO getTodoList(String title) {
         return todoDao.getTodoList(title);
     }
+
+    public List<TodoListDTO> getAllTodoLists() { return todoDao.getAllTodoLists(); }
 
     public void updateTodoValue(String todoListTitle, String todoTitle, Map<String, Object> data) {
         todoDao.updateTodoValue(todoListTitle, todoTitle, data);
