@@ -40,6 +40,7 @@ public class FirebaseDaoStrategy implements TodoDao {
         try {
             Query query = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).whereEqualTo(FirebaseConstants.TODO_LIST_TITLE_KEY, title);
             QuerySnapshot querySnapshot = query.get().get();
+            if (querySnapshot.isEmpty()) throw new TodoListNotFoundException();
             return getTodoListDTO(querySnapshot);
         } catch (ExecutionException | InterruptedException e) {
             throw new TodoListNotFoundException();
