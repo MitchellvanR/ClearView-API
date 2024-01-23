@@ -21,6 +21,10 @@ public class TodoService {
         this.todoDao.updateTodo(title, data);
     }
 
+    public void deleteTodo(String title) {
+        this.todoDao.deleteTodo(title);
+    }
+
     @Inject
     public void setTodoDao(TodoDao todoDao) {
         this.todoDao = todoDao;

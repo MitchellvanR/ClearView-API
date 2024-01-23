@@ -57,6 +57,16 @@ public class FirebaseDaoStrategy implements TodoDao {
         database.collection("todos").document(title).set(data, SetOptions.merge());
     }
 
+    @Override
+    public void deleteTodo(String title) {
+//        Map<String, Object> updates = new HashMap<>();
+//        updates.put("title", FieldValue.delete());
+//        updates.put("description", FieldValue.delete());
+//        updates.put("isCompleted", FieldValue.delete());
+//        database.collection("todos").document(title).update(updates);
+        database.collection("todos").document(title).delete();
+    }
+
     private TodoDTO getTodoDTO(QuerySnapshot querySnapshot) {
         QueryDocumentSnapshot document = querySnapshot.getDocuments().getFirst();
 

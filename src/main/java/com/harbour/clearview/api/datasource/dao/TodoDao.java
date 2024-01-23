@@ -10,4 +10,6 @@ public interface TodoDao {
     TodoDTO getTodo(String title);
 
     void updateTodo(String title, Map<String, Object> data);
+
+    void deleteTodo(String title);
 }

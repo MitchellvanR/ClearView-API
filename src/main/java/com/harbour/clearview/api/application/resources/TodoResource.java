@@ -47,6 +47,14 @@ public class TodoResource {
                 .build();
     }
 
+    @DELETE
+    @Path("/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteTodo(@PathParam("title") String title) {
+        todoService.deleteTodo(title);
+        return Response.ok().build();
+    }
+
     @Inject
     public void setTodoService(TodoService todoService) {
         this.todoService = todoService;
