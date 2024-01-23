@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 @Default
 public class FirebaseDaoStrategy implements TodoDao {
 
-    private Firestore database;
+    private final Firestore database;
 
     public FirebaseDaoStrategy() {
         try {
