@@ -4,6 +4,8 @@ import com.harbour.clearview.api.application.dto.TodoDTO;
 import com.harbour.clearview.api.datasource.dao.TodoDao;
 import jakarta.inject.Inject;
 
+import java.util.Map;
+
 public class TodoService {
     private TodoDao todoDao;
 
@@ -15,10 +17,12 @@ public class TodoService {
         return todoDao.getTodo(title);
     }
 
+    public void updateTodo(String title, Map<String, Object> data) {
+        this.todoDao.updateTodo(title, data);
+    }
+
     @Inject
     public void setTodoDao(TodoDao todoDao) {
         this.todoDao = todoDao;
     }
-
-
 }

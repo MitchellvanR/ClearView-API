@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.net.URI;
+import java.util.Map;
 
 @Path("/todos")
 public class TodoResource {
@@ -31,6 +32,18 @@ public class TodoResource {
         return Response
                 .ok()
                 .entity(todoService.getTodo(title))
+                .build();
+    }
+
+    @PATCH
+    @Path("/{title}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateTodo(@PathParam("title") String title, Map<String, Object> data) {
+        todoService.updateTodo(title, data);
+        return Response
+                .noContent()
+                .entity(data)
                 .build();
     }
 
