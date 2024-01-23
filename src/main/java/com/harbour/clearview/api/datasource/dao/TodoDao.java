@@ -9,7 +9,9 @@ public interface TodoDao {
 
     TodoListDTO getTodoList(String title);
 
-    <T> void updateTodoValue(String todoListTitle, String todoTitle, Map<String, T> data);
+    void updateTodoValue(String todoListTitle, String todoTitle, Map<String, Object> data);
 
     void deleteTodoList(String title);
+
+    void deleteTodoFromTodoList(String todoListTitle, String todoTitle);
 }

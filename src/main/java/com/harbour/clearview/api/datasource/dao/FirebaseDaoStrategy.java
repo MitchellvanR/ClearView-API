@@ -12,6 +12,7 @@ import jakarta.enterprise.inject.Default;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.IntStream;
 
 @Default
 public class FirebaseDaoStrategy implements TodoDao {
@@ -41,7 +42,7 @@ public class FirebaseDaoStrategy implements TodoDao {
         try {
             Query query = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).whereEqualTo(FirebaseConstants.TODO_LIST_TITLE_KEY, title);
             QuerySnapshot querySnapshot = query.get().get();
-            if (querySnapshot.isEmpty()) throw new TodoListNotFoundException();
+            validateTodoListExists(querySnapshot);
             return getTodoListDTO(querySnapshot);
         } catch (ExecutionException | InterruptedException e) {
             throw new TodoListNotFoundException();
@@ -49,15 +50,13 @@ public class FirebaseDaoStrategy implements TodoDao {
     }
 
     @Override
-    public <T> void updateTodoValue(String todoListTitle, String todoTitle, Map<String, T> data) {
+    public void updateTodoValue(String todoListTitle, String todoTitle, Map<String, Object> data) {
         try {
             DocumentReference documentReference = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).document(todoListTitle);
             DocumentSnapshot documentSnapshot = documentReference.get().get();
-            if (!documentSnapshot.exists()) throw new TodoListNotFoundException();
-            @SuppressWarnings("unchecked") // This is safe, because of the use of generics and a null check for todos. This ensures type safety.
-            List<Map<String, T>> todos = (List<Map<String, T>>) documentSnapshot.get(FirebaseConstants.TODO_LIST_TODOS_KEY);
-            if (todos == null) throw new TodosNotFoundException();
-            for (Map<String, T> todo : todos) {
+            validateTodoListExists(documentSnapshot);
+            List<Map<String, Object>> todos = extractTodosFromSnapshot(documentSnapshot);
+            for (Map<String, Object> todo : todos) {
                 if (todo.get(FirebaseConstants.TODO_TITLE_KEY).equals(todoTitle)) {
                     todo.putAll(data);
                     break;
@@ -72,6 +71,49 @@ public class FirebaseDaoStrategy implements TodoDao {
     @Override
     public void deleteTodoList(String title) {
         database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).document(title).delete();
+    }
+
+    @Override
+    public void deleteTodoFromTodoList(String todoListTitle, String todoTitle) {
+        try {
+            DocumentReference documentReference = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).document(todoListTitle);
+            DocumentSnapshot documentSnapshot = documentReference.get().get();
+            validateTodoListExists(documentSnapshot);
+            List<Map<String, Object>> todos = extractTodosFromSnapshot(documentSnapshot);
+            int indexToRemove = findIndexOfTodoByTitle(todos, todoTitle);
+            if (indexToRemove != -1) {
+                todos.remove(indexToRemove);
+                documentReference.update(FirebaseConstants.TODO_LIST_TODOS_KEY, todos);
+            } else {
+                throw new TodosNotFoundException();
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            throw new TodoListNotFoundException();
+        }
+    }
+
+    private void validateTodoListExists(DocumentSnapshot documentSnapshot) {
+        if (!documentSnapshot.exists()) throw new TodoListNotFoundException();
+    }
+
+    private void validateTodoListExists(QuerySnapshot querySnapshot) {
+        if (querySnapshot.isEmpty()) throw new TodoListNotFoundException();
+    }
+
+    private List<Map<String, Object>> extractTodosFromSnapshot(DocumentSnapshot documentSnapshot) {
+        @SuppressWarnings("unchecked") // This is safe because of the null check right after.
+        List<Map<String, Object>> todos = (List<Map<String, Object>>) documentSnapshot.get(FirebaseConstants.TODO_LIST_TODOS_KEY);
+        if (todos == null) {
+            throw new TodosNotFoundException();
+        }
+        return todos;
+    }
+
+    private int findIndexOfTodoByTitle(List<Map<String, Object>> todos, String todoTitle) {
+        return IntStream.range(0, todos.size())
+                .filter(i -> todos.get(i).get(FirebaseConstants.TODO_TITLE_KEY).equals(todoTitle))
+                .findFirst()
+                .orElse(-1);
     }
 
     private TodoListDTO getTodoListDTO(QuerySnapshot querySnapshot) {
@@ -102,7 +144,6 @@ public class FirebaseDaoStrategy implements TodoDao {
         todoDTO.setTitle(Objects.requireNonNull((String) todoMap.get(FirebaseConstants.TODO_TITLE_KEY)));
         todoDTO.setDescription(Objects.requireNonNull((String) todoMap.get(FirebaseConstants.TODO_DESCRIPTION_KEY)));
         Boolean todoCompleted = (Boolean) todoMap.get(FirebaseConstants.TODO_COMPLETED_KEY);
-        System.out.println(todoCompleted);
         todoDTO.setCompleted(todoCompleted);
         return todoDTO;
     }

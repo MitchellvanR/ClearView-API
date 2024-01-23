@@ -39,7 +39,7 @@ public class TodoResource {
     @Path("/{todoListTitle}/todos/{todoTitle}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public <T> Response updateTodoValue(@PathParam("todoListTitle") String todoListTitle, @PathParam("todoTitle") String todoTitle, Map<String, T> data) {
+    public Response updateTodoValue(@PathParam("todoListTitle") String todoListTitle, @PathParam("todoTitle") String todoTitle, Map<String, Object> data) {
         todoService.updateTodoValue(todoListTitle, todoTitle, data);
         return Response
                 .noContent()
@@ -52,6 +52,14 @@ public class TodoResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteTodoList(@PathParam("title") String title) {
         todoService.deleteTodoList(title);
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/{todoListTitle}/todos/{todoTitle}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteTodoFromTodoList(@PathParam("todoListTitle") String todoListTitle, @PathParam("todoTitle") String todoTitle) {
+        todoService.deleteTodoFromTodoList(todoListTitle, todoTitle);
         return Response.ok().build();
     }
 

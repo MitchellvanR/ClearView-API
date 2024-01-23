@@ -17,12 +17,16 @@ public class TodoService {
         return todoDao.getTodoList(title);
     }
 
-    public <T> void updateTodoValue(String todoListTitle, String todoTitle, Map<String, T> data) {
+    public void updateTodoValue(String todoListTitle, String todoTitle, Map<String, Object> data) {
         todoDao.updateTodoValue(todoListTitle, todoTitle, data);
     }
 
     public void deleteTodoList(String title) {
         this.todoDao.deleteTodoList(title);
+    }
+
+    public void deleteTodoFromTodoList(String todoListTitle, String todoTitle) {
+        this.todoDao.deleteTodoFromTodoList(todoListTitle, todoTitle);
     }
 
     @Inject
