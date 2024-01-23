@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 @Path("/todoLists")
@@ -57,6 +58,19 @@ public class TodoResource {
         return Response
                 .noContent()
                 .entity(data)
+                .build();
+    }
+
+    @PATCH
+    @Path("/{todoListTitle}/todos/{todoTitle}")
+    public Response completeTodo(@PathParam("todoListTitle") String todoListTitle, @PathParam("todoTitle") String todoTitle) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("completed", true);
+        todoService.updateTodoValue(todoListTitle, todoTitle, data);
+        return Response
+                .noContent()
+                .entity(data)
+                .type(MediaType.APPLICATION_JSON)
                 .build();
     }
 
