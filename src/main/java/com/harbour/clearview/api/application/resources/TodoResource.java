@@ -63,6 +63,7 @@ public class TodoResource {
 
     @PATCH
     @Path("/{todoListTitle}/todos/{todoTitle}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response completeTodo(@PathParam("todoListTitle") String todoListTitle, @PathParam("todoTitle") String todoTitle) {
         Map<String, Object> data = new HashMap<>();
         data.put("completed", true);
@@ -70,7 +71,6 @@ public class TodoResource {
         return Response
                 .noContent()
                 .entity(data)
-                .type(MediaType.APPLICATION_JSON)
                 .build();
     }
 
