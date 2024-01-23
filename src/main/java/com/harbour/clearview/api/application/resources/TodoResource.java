@@ -1,6 +1,6 @@
 package com.harbour.clearview.api.application.resources;
 
-import com.harbour.clearview.api.application.dto.TodoDTO;
+import com.harbour.clearview.api.application.dto.TodoListDTO;
 import com.harbour.clearview.api.application.services.TodoService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -10,18 +10,18 @@ import jakarta.ws.rs.core.Response;
 import java.net.URI;
 import java.util.Map;
 
-@Path("/todos")
+@Path("/todoLists")
 public class TodoResource {
     private TodoService todoService;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addTodo(TodoDTO todoDTO) {
-        todoService.addTodo(todoDTO);
+    public Response addTodoList(TodoListDTO todoListDTO) {
+        todoService.addTodoList(todoListDTO);
         return Response
-                .created(URI.create("/" + todoDTO.getTitle()))
-                .entity(todoDTO)
+                .created(URI.create("/" + todoListDTO.getTitle()))
+                .entity(todoListDTO)
                 .build();
     }
 

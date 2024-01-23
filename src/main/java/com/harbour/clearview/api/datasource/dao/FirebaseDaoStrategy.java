@@ -2,9 +2,11 @@ package com.harbour.clearview.api.datasource.dao;
 
 import com.google.cloud.firestore.*;
 import com.harbour.clearview.api.application.dto.TodoDTO;
+import com.harbour.clearview.api.application.dto.TodoListDTO;
 import com.harbour.clearview.api.datasource.FirebaseInitializer;
 import com.harbour.clearview.api.datasource.dao.exceptions.CollectionNotFoundException;
 import com.harbour.clearview.api.datasource.dao.exceptions.TodoNotFoundException;
+import com.harbour.clearview.api.datasource.util.FirebaseConstants;
 import jakarta.enterprise.inject.Default;
 
 import java.io.IOException;
@@ -27,13 +29,13 @@ public class FirebaseDaoStrategy implements TodoDao {
     }
 
     @Override
-    public void addTodo(TodoDTO todoDTO) {
-        DocumentReference docRef = database.collection("todos").document(todoDTO.getTitle());
+    public void addTodoList(TodoListDTO todoListDTO) {
+        DocumentReference documentReference = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).document(todoListDTO.getTitle());
         Map<String, Object> data = new HashMap<>();
-        data.put("title", todoDTO.getTitle());
-        data.put("description", todoDTO.getDescription());
-        data.put("isCompleted", todoDTO.isCompleted());
-        docRef.set(data);
+        data.put(FirebaseConstants.TODO_LIST_TITLE_KEY, todoListDTO.getTitle());
+        data.put(FirebaseConstants.TODO_LIST_DATE_KEY, todoListDTO.getDate());
+        data.put(FirebaseConstants.TODO_LIST_TODOS_KEY, todoListDTO.getTodos());
+        documentReference.set(data);
     }
 
     @Override

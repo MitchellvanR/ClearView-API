@@ -3,14 +3,14 @@ package com.harbour.clearview.api.application.dto;
 public class TodoDTO {
     private String title;
     private String description;
-    private boolean isCompleted;
+    private boolean completed;
 
     public TodoDTO() {}
 
     public TodoDTO(String title, String description) {
         this.title = title;
         this.description = description;
-        isCompleted = false;
+        this.completed = false;
     }
 
     public String getTitle() {
@@ -30,12 +30,12 @@ public class TodoDTO {
     }
 
     public boolean isCompleted() {
-        return isCompleted;
+        return completed;
     }
 
     public void complete() {
-        isCompleted = true;
+        completed = true;
     }
 
-    public void incomplete() { isCompleted = false; }
+    public void incomplete() { completed = false; }
 }

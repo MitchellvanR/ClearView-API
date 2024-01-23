@@ -1,6 +1,7 @@
 package com.harbour.clearview.api.application.services;
 
 import com.harbour.clearview.api.application.dto.TodoDTO;
+import com.harbour.clearview.api.application.dto.TodoListDTO;
 import com.harbour.clearview.api.datasource.dao.TodoDao;
 import jakarta.inject.Inject;
 
@@ -9,8 +10,8 @@ import java.util.Map;
 public class TodoService {
     private TodoDao todoDao;
 
-    public void addTodo(TodoDTO todoDTO) {
-        todoDao.addTodo(todoDTO);
+    public void addTodoList(TodoListDTO todoListDTO) {
+        todoDao.addTodoList(todoListDTO);
     }
 
     public TodoDTO getTodo(String title) {

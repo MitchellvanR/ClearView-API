@@ -1,14 +1,16 @@
 package com.harbour.clearview.api.application.dto;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TodoListDTO {
     private String title;
-    private ArrayList<TodoDTO> todoDTOs;
+    private String date;
+    private List<TodoDTO> todos;
+
+    public TodoListDTO() {}
 
     public TodoListDTO(String title) {
         this.title = title;
-        todoDTOs = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -19,15 +21,19 @@ public class TodoListDTO {
         this.title = title;
     }
 
-    public ArrayList<TodoDTO> getTodoDTOs() {
-        return todoDTOs;
+    public String getDate() {
+        return date;
     }
 
-    public void setTodoDTOs(ArrayList<TodoDTO> todoDTOs) {
-        this.todoDTOs = todoDTOs;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public void add(TodoDTO todoDTO) {
-        todoDTOs.add(todoDTO);
+    public List<TodoDTO> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<TodoDTO> todos) {
+        this.todos = todos;
     }
 }
