@@ -14,7 +14,7 @@ public class FirebaseInitializer {
 
     public static Firestore initialize() throws IOException {
         if (initialized) return FirestoreClient.getFirestore();
-        try (InputStream serviceAccount = FirebaseInitializer.class.getClassLoader().getResourceAsStream("serviceAccountKey.json")) {
+        try (InputStream serviceAccount = FirebaseInitializer.class.getClassLoader().getResourceAsStream("keys/serviceAccountKey.json")) {
             if (serviceAccount == null) throw new RuntimeException();
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
             FirebaseOptions options = new FirebaseOptions.Builder()
