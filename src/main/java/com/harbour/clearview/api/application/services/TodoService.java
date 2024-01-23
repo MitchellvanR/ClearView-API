@@ -17,10 +17,6 @@ public class TodoService {
         return todoDao.getTodoList(title);
     }
 
-    public void updateTodo(String title, Map<String, Object> data) {
-        this.todoDao.updateTodo(title, data);
-    }
-
     public void deleteTodo(String title) {
         this.todoDao.deleteTodo(title);
     }

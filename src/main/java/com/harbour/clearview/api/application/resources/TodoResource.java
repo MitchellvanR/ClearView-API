@@ -35,18 +35,6 @@ public class TodoResource {
                 .build();
     }
 
-    @PATCH
-    @Path("/{title}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTodo(@PathParam("title") String title, Map<String, Object> data) {
-        todoService.updateTodo(title, data);
-        return Response
-                .noContent()
-                .entity(data)
-                .build();
-    }
-
     @DELETE
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
