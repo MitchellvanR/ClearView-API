@@ -5,6 +5,7 @@ import com.harbour.clearview.api.application.dto.TodoDTO;
 import com.harbour.clearview.api.application.dto.TodoListDTO;
 import com.harbour.clearview.api.datasource.FirebaseInitializer;
 import com.harbour.clearview.api.datasource.dao.exceptions.TodoListNotFoundException;
+import com.harbour.clearview.api.datasource.dao.exceptions.TodosNotFoundException;
 import com.harbour.clearview.api.datasource.util.FirebaseConstants;
 import jakarta.enterprise.inject.Default;
 
@@ -42,6 +43,27 @@ public class FirebaseDaoStrategy implements TodoDao {
             QuerySnapshot querySnapshot = query.get().get();
             if (querySnapshot.isEmpty()) throw new TodoListNotFoundException();
             return getTodoListDTO(querySnapshot);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new TodoListNotFoundException();
+        }
+    }
+
+    @Override
+    public <T> void updateTodoValue(String todoListTitle, String todoTitle, Map<String, T> data) {
+        try {
+            DocumentReference documentReference = database.collection(FirebaseConstants.TODO_LISTS_COLLECTION_NAME).document(todoListTitle);
+            DocumentSnapshot documentSnapshot = documentReference.get().get();
+            if (!documentSnapshot.exists()) throw new TodoListNotFoundException();
+            @SuppressWarnings("unchecked") // This is safe, because of the use of generics and a null check for todos. This ensures type safety.
+            List<Map<String, T>> todos = (List<Map<String, T>>) documentSnapshot.get(FirebaseConstants.TODO_LIST_TODOS_KEY);
+            if (todos == null) throw new TodosNotFoundException();
+            for (Map<String, T> todo : todos) {
+                if (todo.get(FirebaseConstants.TODO_TITLE_KEY).equals(todoTitle)) {
+                    todo.putAll(data);
+                    break;
+                }
+            }
+            documentReference.update(FirebaseConstants.TODO_LIST_TODOS_KEY, todos);
         } catch (ExecutionException | InterruptedException e) {
             throw new TodoListNotFoundException();
         }
