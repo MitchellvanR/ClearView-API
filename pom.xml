@@ -6,7 +6,7 @@
     <packaging>war</packaging>
 
     <groupId>com.harbour</groupId>
-    <artifactId>clearview</artifactId>
+    <artifactId>clearview-api</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
