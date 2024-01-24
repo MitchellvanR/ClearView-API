@@ -1,4 +1,4 @@
-package com.harbour.clearview.api.datasource;
+package com.harbour.clearview.api.infrastructure.databases;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;

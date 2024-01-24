@@ -1,10 +1,9 @@
 package com.harbour.clearview.api.datasource.dao;
 
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.harbour.clearview.api.application.dto.TodoDTO;
 import com.harbour.clearview.api.application.dto.TodoListDTO;
-import com.harbour.clearview.api.datasource.FirebaseInitializer;
+import com.harbour.clearview.api.infrastructure.databases.FirebaseInitializer;
 import com.harbour.clearview.api.datasource.dao.exceptions.NoTodoListsFoundException;
 import com.harbour.clearview.api.datasource.dao.exceptions.TodoListNotFoundException;
 import com.harbour.clearview.api.datasource.dao.exceptions.TodosNotFoundException;
