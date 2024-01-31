@@ -34,7 +34,7 @@ public class TodoResource {
     public Response addTodoToList(@PathParam("todoListTitle") String todoListTitle, TodoDTO newTodo) {
         todoService.addTodoToList(todoListTitle, newTodo);
         return Response
-                .created(URI.create("/" + todoListTitle + "/todos" + newTodo.getTitle()))
+                .created(URI.create("/" + todoListTitle + "/todos/"))
                 .entity(newTodo)
                 .build();
     }
